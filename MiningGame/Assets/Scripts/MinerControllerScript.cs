@@ -14,10 +14,21 @@ public class MinerControllerScript : MonoBehaviour
 
     //ground checking
     private bool isGrounded;
-    public BoxCollider2D GroundCheck;
+
+    // this isn't used for anything
+    //public BoxCollider2D GroundCheck;
+    
     //private int groundContacts = 0;
 
     public float airControlMultiplier = 0.05f;
+
+
+    private SpriteRenderer spriteRenderer;
+
+    private void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -48,9 +59,21 @@ public class MinerControllerScript : MonoBehaviour
         }
     }
 
+
+
     private void FixedUpdate()
     {
         float xVelocity = body.linearVelocity.x;
+
+        if (xVelocity < 0)
+        {
+            spriteRenderer.flipX = true; // Face left
+        }
+        else if (xVelocity > 0)
+        {
+            spriteRenderer.flipX = false; // Face right
+        }
+
 
         if (isGrounded)
         {
@@ -60,6 +83,7 @@ public class MinerControllerScript : MonoBehaviour
                 xVelocity *= drag;
             }
         }
+
         else
         {
             xVelocity += xInput * (speed * airControlMultiplier);
